@@ -2,39 +2,46 @@
   <div class="one">
     <div class="three">
       <div class="thzuo">
-        <el-image style="width: 200px; height: 200px" :src="softwareDetail.software_picurl"></el-image>
+        <el-image
+          style="width: 200px; height: 200px"
+          :src="'http://localhost:8111' + softwareDetail.cover"
+        ></el-image>
       </div>
       <div class="thyou">
         <div class="aa">
-          {{ softwareDetail.software_name }}
+          {{ softwareDetail.name }}
         </div>
+        <el-input v-model="name" placeholder="请输入新的名称"></el-input>
         <div class="bb">
           <div class="bbbb">
             价格：
           </div>
           <div class="bbb">
-            {{ this.currentPrice }}
+            {{ softwareDetail.price }}
           </div>
         </div>
-        <div class="cc">
-          <el-card shadow="never">
-            授权发送：<i class="el-icon-check"></i>订单支付完成 10 分钟内，即可在个人订单中心查看授权码
-          </el-card>
-        </div>
-        <div>
-          <div class="dd">
-            授权类型: {{ this.currentPeriod }}
+        <el-input v-model="price" placeholder="请输入新的价格"></el-input>
+        <div class="bb">
+          <div class="bbbb">
+            数量：
           </div>
-          <div>
-            <span v-for="price in priceList" :key="price.price_id" class="ddd">
-            <el-button plain @click="handleChangePrice(price.price_id)">
-              {{ price.price_period }}
-            </el-button>
-            </span>
+          <div class="bbb">
+            {{ softwareDetail.num }}
           </div>
         </div>
+        <el-input v-model="num" placeholder="请输入新的数量"></el-input>
+        <div class="bb">
+          <div class="bbbb">
+            描述：
+          </div>
+          <div class="bbb">
+            {{ softwareDetail.description }}
+          </div>
+        </div>
+        <el-input v-model="description" placeholder="请输入新的描述"></el-input>
         <div class="ee">
-          <el-button @click="handleAddToCart" type="primary">加入订单</el-button>
+          <el-button @click="commit()" type="primary">点击修改</el-button>
+          <el-button @click="deleteById()" type="primary">点击删除</el-button>
         </div>
       </div>
     </div>
@@ -45,36 +52,41 @@
 export default {
   data() {
     return {
-      currentPrice: 0,
-      currentPeriod: ''
-    }
+      name: "",
+      description: "",
+      price: "",
+      num: "",
+      description: "",
+    };
   },
   methods: {
-    //选择授权类型，并改变价格
-    handleChangePrice(price_id) {
-      let price = this.priceList.find((element) => element.price_id === price_id);
-      this.currentPeriod = price.price_period;
-      this.currentPrice = price.price_discount;
-    },
     handleAddToCart() {
-        this.$store.dispatch("addToCart", {
-        client_id: 1,
-        cart_software: this.softwareDetail.software_id,
-        cart_softwarename: this.softwareDetail.software_name,
-        cart_price: this.currentPrice,
-        cart_count: 1,
-        cart_period: this.currentPeriod,
-        cart_picurl: this.softwareDetail.software_picurl});
-      this.$alert('已成功添加订单', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info',
-              message: `action: ${ action }`
-            });
-          }
-        });
-      }
+      this.$alert("已成功添加订单", "提示", {
+        confirmButtonText: "确定",
+        callback: (action) => {
+          this.$message({
+            type: "info",
+            message: `action: ${action}`,
+          });
+        },
+      });
+    },
+    deleteById() {
+      let obj = { commodityId: this.softwareDetail.id };
+      this.$store.dispatch("deleteById", JSON.stringify(obj));
+    },
+    commit() {
+      let commodity = {
+        id: this.softwareDetail.id,
+        name: this.name,
+        description: this.description,
+        price: this.price,
+        num: this.num,
+        creatorId: localStorage.getItem("id"),
+      };
+      let obj = { commodity: commodity };
+      this.$store.dispatch("modify", JSON.stringify(obj));
+    },
   },
   computed: {
     softwareDetail() {
@@ -82,14 +94,10 @@ export default {
     },
     priceList() {
       return this.$store.state.software.priceList;
-    }
+    },
   },
-  mounted() {
-    this.currentPrice = this.$store.state.software.priceList[0].price_discount;
-    this.currentPeriod = this.$store.state.software.priceList[0].price_period;
-  }
-
-}
+  mounted() {},
+};
 </script>
 
 <style scoped>
@@ -131,7 +139,6 @@ export default {
 
 .bbb {
   font-size: 30px;
-  color: red;
   float: left;
 }
 
@@ -140,16 +147,16 @@ export default {
   float: left;
   font-size: 20px;
 }
-.cc{
+.cc {
   margin-bottom: 30px;
 }
-.dd{
+.dd {
   margin-bottom: 30px;
 }
-.ddd{
+.ddd {
   margin-right: 20px;
 }
-.ee{
+.ee {
   margin-top: 30px;
   float: right;
   margin-right: 60px;

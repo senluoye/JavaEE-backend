@@ -60,7 +60,7 @@ const routes = [{
                 component: addComnunity
             },
             {
-                path: '/goumai',
+                path: '/change',
                 name: 'goumai',
                 component: goumai
             },

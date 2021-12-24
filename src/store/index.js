@@ -8,26 +8,16 @@ Vue.use(Vuex)
 const moduleSoftware = {
     state: {
         //软件列表
-        discountList: [],
-        recommendList: [],
-        winList: [],
-        macList: [],
         softwareList: [],
-        softwareDetail: {},
-        priceList: [],
-        cartList: [],
-        clientList: [],
+        softwareDetail: null,
         user: {
-            email: "",
-            username: "",
+            id: "",
+            name: "",
             password: "",
-            qq: "",
-            wechat: "",
-            phone: "",
         },
         code: -2,
-        islogin: false,
         NumberList: [],
+        token: '',
     },
     mutations: {
         setDiscountList(state, data) {
@@ -58,22 +48,21 @@ const moduleSoftware = {
             state.clientList = data;
         },
         setUserDetails(state, data) {
-            // console.log(data);
             state.islogin = true;
-            state.user.email = data.user.email;
-            state.user.username = data.user.username;
-            state.user.password = data.user.password;
-            state.user.qq = data.user.qq;
-            state.user.wechat = data.user.wechat;
-            state.user.phone = data.user.phone;
-            state.code = data.code;
+            state.user.id = data.data.id;
+            state.user.name = data.data.name;
+            state.user.password = data.data.password;
+            state.token = data.data.token;
+            localStorage.token = data.data.token;
+            localStorage.id = data.data.id;
+            localStorage.name = data.data.name;
+            localStorage.password = data.data.password;
         },
         setNumberList(state, data) {
             state.NumberList = data;
         }
     },
     actions: {
-
         deleteCommunity(context, software_id) {
             axios.post("/api/deletecommunity", {
                 software_id: software_id,
@@ -141,24 +130,22 @@ const moduleSoftware = {
             })
         },
 
-        //添加到订单
-        addToCart(context, cart) {
-            axios.post("/api/addToCart", {
-                client_id: cart.client_id,
-                cart_software: cart.cart_software,
-                cart_softwarename: cart.cart_softwarename,
-                cart_price: cart.cart_price,
-                cart_count: cart.cart_count,
-                cart_period: cart.cart_period,
-                cart_picurl: cart.cart_picurl,
+        //修改商品信息
+        modify(context, commodity) {
+            axios({
+                url: '/api/admin/modify',
+                method: 'post',
                 headers: {
                     Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                    token: localStorage.getItem('token')
+                },
+                data: commodity
             }).then((res) => {
-                if (res.data === 200)
-                    return res.data;
-            })
+                console.log(res.data)
+            }).catch((err) => {
+                console.log(err)
+            });
         },
 
 
@@ -179,84 +166,40 @@ const moduleSoftware = {
             })
         },
 
-
-
-        //获取主页应该加载的列表
-        getHomePageSoftwares(context) {
-            axios.get("/api/getHomePageSoftwares", {
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            }).then((json) => {
-                setTimeout(() => {
-                    context.commit("setDiscountList", Array.from(json.discountList));
-                    // 设置上面vuex的状态
-                    context.commit("setRecommendList", Array.from(json.recommendList));
-                    context.commit("setWinList", Array.from(json.winList));
-                    context.commit("setMacList", Array.from(json.macList));
-                })
-            })
-        },
-
-        //拿到软件列表
+        //拿到商品列表
         getSoftwares(context) {
-            axios.get("/api/getSoftwares", {
+            axios.get("/api/admin", {
                 headers: {
                     Accept: 'application/json',
-                    "Content-Type": 'application/json'
+                    "Content-Type": 'application/json',
+                    token: localStorage.getItem('token')
                 }
             }).then((res) => {
                 if (res.status === 200)
                     return res.data;
             }).then((json) => {
                 setTimeout(() => {
+                    console.log(json)
                     context.commit("setSoftwareList", Array.from(json.data));
                 })
             })
         },
 
-        //获取软件详细信息
-        getSoftwareDetail(context, software_id) {
-            axios.post("/api/getSoftwareDetail", {
-                software_id: software_id,
+        //增加商品
+        addGoods(context, data) {
+            axios({
+                url: '/api/admin/add',
+                method: 'post',
                 headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
+                    'Content-Type': 'multipart/form-data',
+                    token: localStorage.getItem('token')
+                },
+                data: data
             }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            }).then((json) => {
-                setTimeout(() => {
-                    // console.log("下面是软甲详细asssss")
-                    // console.log(json);
-                    context.commit("setSoftwareDetail", json.software);
-                    context.commit("setPriceList", Array.from(json.price));
-                }, 50)
-            })
-        },
-
-        //获取订单
-        getShoppingCart(context, cart_user) {
-            axios.post("/api/getShoppingCart", {
-                cart_user: cart_user,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            }).then((json) => {
-                setTimeout(() => {
-                    console.log(json);
-                    context.commit("setCartList", json.data);
-                }, 50)
-            })
+                console.log(res.data)
+            }).catch((err) => {
+                console.log(err)
+            });
         },
 
         //获取客户
@@ -280,10 +223,9 @@ const moduleSoftware = {
         // 注册
         register(context, user) {
             console.log(user);
-            axios.post("/api/register", {
-                username: user.username,
+            axios.post("/api/user/register", {
+                name: user.name,
                 password: user.password,
-                email: user.email,
                 headers: {
                     Accept: 'application/json',
                     "Content-Type": 'application/json'
@@ -291,17 +233,13 @@ const moduleSoftware = {
             }).then((res) => {
                 if (res.status === 200)
                     return res.data;
-            }).then((json) => {
-                // if (json == 1)
-                console.log("json:")
-                console.log(json)
             })
         },
 
         // 登陆
         login(context, user) {
-            axios.post("/api/login", {
-                email: user.email,
+            axios.post("/api/user/login", {
+                name: user.name,
                 password: user.password,
                 headers: {
                     Accept: 'application/json',
@@ -309,14 +247,11 @@ const moduleSoftware = {
                 }
             }).then((res) => {
                 if (res.status === 200) {
-                    console.log("返回的信息：");
-                    console.log(res.data);
                     return res.data;
                 }
             }).then((json) => {
-                console.log(json);
                 setTimeout(() => {
-                    if (json.code == 1)
+                    if (json.code == 0)
                         context.commit("setUserDetails", json);
                 })
             })
@@ -336,31 +271,24 @@ const moduleSoftware = {
             })
         },
 
-        deleteFromCart(context, cart_id) {
-            axios.post("/api/deleteFromCart", {
-                cart_id: cart_id,
+        deleteById(context, id) {
+            axios({
+                url: '/api/admin/del',
+                method: 'post',
                 headers: {
                     Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                    token: localStorage.getItem('token')
+                },
+                data: id
             }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            })
+                console.log(res.data)
+            }).catch((err) => {
+                console.log(err)
+            });
         },
 
-        deleteFromClient(context, clent_id) {
-            axios.post("/api/deletefromclient", {
-                clent_id: clent_id,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            })
-        }
+
     }
 }
 

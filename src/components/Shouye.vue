@@ -2,7 +2,7 @@
   <div class="app">
     <div v-if="islogin">
       <div class="ma"></div>
-      <h1 class="ni">欢迎您      {{username}}</h1>
+      <h1 class="ni">欢迎您 {{ name }}</h1>
     </div>
     <div v-else class="nologin">
       请先登陆
@@ -14,53 +14,59 @@
 export default {
   data() {
     return {
-      getNumberList:[],
-    }
+      getNumberList: [],
+    };
   },
-  methods: {
-  },
+  methods: {},
   computed: {
-    islogin(){
-      return this.$store.state.software.islogin;
+    islogin() {
+      if (localStorage.getItem("token") != null) {
+        this.$store.state.software.token = localStorage.getItem("token");
+        return true;
+      }
+      return false;
     },
-    username(){
-      return this.$store.state.software.user.username;
-    }
+    name() {
+      if (localStorage.getItem("name") != null) {
+        this.$store.state.software.name = localStorage.getItem("name");
+        return localStorage.getItem("name");
+      }
+      return "";
+    },
   },
   mounted() {
     // this.$store.dispatch("getNumber");
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-.ma{
+.ma {
   height: 30vh;
 }
-.ni{
+.ni {
   text-align: center;
+  margin-top: 10vh;
 }
-.app{
+.app {
   background-color: white;
 }
-.show{
+.show {
   width: 18vw;
   height: 38vh;
   background-color: aqua;
   float: left;
   margin-left: 6vw;
   margin-top: 5vh;
-  
 }
-.card{
+.card {
   width: 100%;
   height: 100%;
 }
 /* .show:hover{
 
 } */
-.nologin{
+.nologin {
   text-align: center;
 }
 </style>
-
