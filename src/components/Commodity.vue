@@ -27,7 +27,7 @@
                   <el-col :span="8">
                     <el-image
                       style="width: 100px; height: 100px"
-                      :src="'http://localhost:8111' + project.cover"
+                      :src="'https://javaee.therainisme.com' + project.cover"
                     ></el-image>
                   </el-col>
                   <el-col :span="8">

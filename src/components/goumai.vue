@@ -4,14 +4,21 @@
       <div class="thzuo">
         <el-image
           style="width: 200px; height: 200px"
-          :src="'http://localhost:8111' + softwareDetail.cover"
+          :src="'https://javaee.therainisme.com' + softwareDetail.cover"
         ></el-image>
       </div>
       <div class="thyou">
-        <div class="aa">
+        <div class="bbbb">
+          商品名称：
+        </div>
+        <div class="bbb">
           {{ softwareDetail.name }}
         </div>
-        <el-input v-model="name" placeholder="请输入新的名称"></el-input>
+        <el-input
+          v-model="name"
+          placeholder="请输入新的名称"
+          class="change"
+        ></el-input>
         <div class="bb">
           <div class="bbbb">
             价格：
@@ -20,7 +27,11 @@
             {{ softwareDetail.price }}
           </div>
         </div>
-        <el-input v-model="price" placeholder="请输入新的价格"></el-input>
+        <el-input
+          v-model="price"
+          placeholder="请输入新的价格"
+          class="change"
+        ></el-input>
         <div class="bb">
           <div class="bbbb">
             数量：
@@ -29,7 +40,11 @@
             {{ softwareDetail.num }}
           </div>
         </div>
-        <el-input v-model="num" placeholder="请输入新的数量"></el-input>
+        <el-input
+          v-model="num"
+          placeholder="请输入新的数量"
+          class="change"
+        ></el-input>
         <div class="bb">
           <div class="bbbb">
             描述：
@@ -38,10 +53,14 @@
             {{ softwareDetail.description }}
           </div>
         </div>
-        <el-input v-model="description" placeholder="请输入新的描述"></el-input>
+        <el-input
+          v-model="description"
+          placeholder="请输入新的描述"
+          class="change"
+        ></el-input>
         <div class="ee">
-          <el-button @click="commit()" type="primary">点击修改</el-button>
-          <el-button @click="deleteById()" type="primary">点击删除</el-button>
+          <el-button @click="commit()" type="primary">修改</el-button>
+          <el-button @click="deleteById()" type="primary">删除</el-button>
         </div>
       </div>
     </div>
@@ -86,6 +105,22 @@ export default {
       };
       let obj = { commodity: commodity };
       this.$store.dispatch("modify", JSON.stringify(obj));
+      setTimeout(() => {
+        if (this.$store.state.software.isChange) {
+          this.$alert("修改成功", "提示", {
+            confirmButtonText: "确定",
+            callback: (action) => {
+              this.$message({
+                type: "info",
+                message: `action: ${action}`,
+              });
+            },
+          });
+          this.$router.push({
+            path: "/commodity",
+          });
+        }
+      }, 3000);
     },
   },
   computed: {
@@ -101,6 +136,9 @@ export default {
 </script>
 
 <style scoped>
+.change {
+  margin-bottom: 20px;
+}
 .two {
   width: 100%;
 }
@@ -134,11 +172,11 @@ export default {
 .bb {
   width: 100%;
   height: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .bbb {
-  font-size: 30px;
+  font-size: 20px;
   float: left;
 }
 

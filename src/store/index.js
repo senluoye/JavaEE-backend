@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import da from "element-ui/src/locale/lang/da";
+import { Loading } from 'element-ui';
 
 Vue.use(Vuex)
 
@@ -18,6 +19,8 @@ const moduleSoftware = {
         code: -2,
         NumberList: [],
         token: '',
+        isAdd: false,
+        isChange: false,
     },
     mutations: {
         setDiscountList(state, data) {
@@ -59,77 +62,15 @@ const moduleSoftware = {
             localStorage.password = data.data.password;
             console.log(localStorage.getItem("token"));
         },
-        setNumberList(state, data) {
-            state.NumberList = data;
+        setIdAdd(state, data) {
+            state.isAdd = true;
+        },
+        setIsChange(state) {
+            state.isChange = true;
         }
+
     },
     actions: {
-        deleteCommunity(context, software_id) {
-            axios.post("/api/deletecommunity", {
-                software_id: software_id,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data);
-                    return res.data;
-                }
-            })
-        },
-
-        changeUser(context, details) {
-            axios.post("/api/changeuser", {
-                email: details.email,
-                username: details.username,
-                qq: details.qq,
-                wechat: details.wechat,
-                phone: details.phone,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data);
-                    return res.data;
-                }
-            })
-        },
-
-        zhuxiao(context, email) {
-            axios.post("/api/zhuxiao", {
-                email: email,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data);
-                    return res.data;
-                }
-            })
-        },
-
-        changeDetails(context, details) {
-            axios.post("/api/changedetails", {
-                software_id: details.softwareid,
-                price_id: details.priceid,
-                software_name: details.softwarename,
-                price_value: details.softwareprice,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data);
-                    return res.data;
-                }
-            })
-        },
 
         //修改商品信息
         modify(context, commodity) {
@@ -143,28 +84,11 @@ const moduleSoftware = {
                 },
                 data: commodity
             }).then((res) => {
-                console.log(res.data)
+                if (res.status === 200)
+                    context.commit("setIsChange", res.data);
             }).catch((err) => {
                 console.log(err)
             });
-        },
-
-
-        // 获得主页信息
-        getNumber(context) {
-            axios.get("/api/getNumber", {
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            }).then((json) => {
-                setTimeout(() => {
-                    context.commit("setNumberList", Array.from(json.NumberList));
-                })
-            })
         },
 
         //拿到商品列表
@@ -180,9 +104,10 @@ const moduleSoftware = {
                     return res.data;
             }).then((json) => {
                 setTimeout(() => {
-                    console.log(json)
                     context.commit("setSoftwareList", Array.from(json.data));
                 })
+            }).catch(() => {
+                loadingInstance.close();
             })
         },
 
@@ -197,28 +122,12 @@ const moduleSoftware = {
                 },
                 data: data
             }).then((res) => {
-                console.log(res.data)
+                return res.data;
+            }).then((json) => {
+                context.commit("setIdAdd", json);
             }).catch((err) => {
                 console.log(err)
             });
-        },
-
-        //获取客户
-        getClient(context) {
-            axios.get("/api/getclient", {
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            }).then((json) => {
-                setTimeout(() => {
-                    console.log(json);
-                    context.commit("setClientList", json.data);
-                }, 50)
-            })
         },
 
         // 注册
@@ -257,39 +166,6 @@ const moduleSoftware = {
                 })
             })
         },
-
-        changeQuantity(context, cart) {
-            axios.post("/api/changeQuantity", {
-                cart_id: cart.id,
-                cart_count: cart.count,
-                headers: {
-                    Accept: 'application/json',
-                    "Content-Type": 'application/json'
-                }
-            }).then((res) => {
-                if (res.status === 200)
-                    return res.data;
-            })
-        },
-
-        deleteById(context, id) {
-            axios({
-                url: '/api/admin/del',
-                method: 'post',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    token: localStorage.getItem('token')
-                },
-                data: id
-            }).then((res) => {
-                console.log(res.data)
-            }).catch((err) => {
-                console.log(err)
-            });
-        },
-
-
     }
 }
 

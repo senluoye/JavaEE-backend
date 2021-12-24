@@ -42,24 +42,9 @@
         </el-col>
       </el-row>
       <el-row :gutter="20" class="buttom">
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <el-button type="primary" @click="tuichu">退出登录</el-button>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <el-button type="primary" @click="zhuxiao">注销账号</el-button>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="grid-content bg-purple" v-if="ischange">
-            <el-button type="primary" @click="change">修改信息</el-button>
-          </div>
-          <div class="grid-content bg-purple" v-else>
-            <el-button type="primary" @click="surechange">确认修改</el-button>
-          </div>
-        </el-col>
+        <div class="grid-content bg-purple exit">
+          <el-button type="primary" @click="tuichu">退出登录</el-button>
+        </div>
       </el-row>
     </div>
   </div>
@@ -130,6 +115,9 @@ export default {
 </script>
 
 <style scoped>
+.exit {
+  float: right;
+}
 .aa {
   margin-top: 20px;
 }

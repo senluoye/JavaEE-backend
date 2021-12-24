@@ -27,7 +27,7 @@
             >选取商品图片</el-button
           >
           <div slot="tip" class="el-upload__tip">
-            只能上传jpg/png文件，且不超过500kb
+            只能上传jpg/png文件
           </div>
         </el-upload>
         <!-- <input id="file" type="file" multiple name="file" /> -->

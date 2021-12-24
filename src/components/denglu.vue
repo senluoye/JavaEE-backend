@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { Loading } from "element-ui";
 export default {
   data() {
     var checkName = (rule, value, callback) => {
@@ -75,14 +76,13 @@ export default {
           return false;
         }
       });
-
+      // let loadingInstance1 = Loading.service({ fullscreen: true });
       this.$store.dispatch("login", {
         name: this.ruleForm.name,
         password: this.ruleForm.password,
       });
-
       setTimeout(() => {
-        if (this.$store.state.software.islogin) {
+        if (localStorage.getItem("token") != null) {
           this.$alert("登陆成功", "提示", {
             confirmButtonText: "确定",
             callback: (action) => {
@@ -96,7 +96,7 @@ export default {
             path: "/",
           });
         } else {
-          this.$alert("用户不存在", "提示", {
+          this.$alert("用户不存在或服务器响应超时", "提示", {
             confirmButtonText: "确定",
             callback: (action) => {
               this.$message({
@@ -106,7 +106,7 @@ export default {
             },
           });
         }
-      }, 1000);
+      }, 5000);
     },
 
     resetForm(formName) {

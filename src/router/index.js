@@ -6,10 +6,7 @@ import Register from '../views/Register.vue'
 import Shouye from '../components/Shouye.vue'
 import Commodity from '../components/Commodity.vue'
 import Order from '../components/Order.vue'
-import changeDetails from '../components/changeDetails.vue'
 import Self from '../views/self'
-import Client from '../components/Client'
-import addComnunity from '../components/addComnunity'
 import goumai from '../components/goumai'
 
 const originalPush = VueRouter.prototype.push
@@ -29,11 +26,7 @@ const routes = [{
                 name: 'Shouye',
                 component: Shouye
             },
-            {
-                path: '/client',
-                name: 'Client',
-                component: Client
-            },
+
             {
                 path: '/commodity',
                 name: 'commodity',
@@ -49,16 +42,7 @@ const routes = [{
                 name: 'Self',
                 component: Self
             },
-            {
-                path: '/changedetails',
-                name: 'changeDetails',
-                component: changeDetails
-            },
-            {
-                path: '/addcomnunity',
-                name: 'addComnunity',
-                component: addComnunity
-            },
+
             {
                 path: '/change',
                 name: 'goumai',
