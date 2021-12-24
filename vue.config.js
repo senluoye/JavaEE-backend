@@ -5,7 +5,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://javaee.therainisme.com:8111',
+                target: 'http://javaee.therainisme.com',
                 ws: true,
                 changeOrigin: true
             }

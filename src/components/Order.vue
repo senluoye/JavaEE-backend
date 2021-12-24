@@ -18,20 +18,20 @@
           <el-input v-model="form.num"></el-input>
         </el-form-item>
         <el-upload
-          class="upload-demo item"
+          class="upload-demo item upload"
           ref="upload"
           :auto-upload="false"
           action=""
         >
           <el-button slot="trigger" size="small" type="primary"
-            >选取文件</el-button
+            >选取商品图片</el-button
           >
           <div slot="tip" class="el-upload__tip">
             只能上传jpg/png文件，且不超过500kb
           </div>
         </el-upload>
         <!-- <input id="file" type="file" multiple name="file" /> -->
-        <el-form-item>
+        <el-form-item class="item commit">
           <el-button type="primary" @click="onSubmit()">点击创建</el-button>
           <el-button>取消</el-button>
         </el-form-item>
@@ -96,6 +96,9 @@ export default {
 </script>
 
 <style scope>
+.commit {
+  margin-top: 30px;
+}
 .one {
   width: 100%;
   background-color: white;
@@ -115,6 +118,6 @@ export default {
   min-height: 36px;
 }
 .upload {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 </style>

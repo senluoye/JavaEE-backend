@@ -57,6 +57,7 @@ const moduleSoftware = {
             localStorage.id = data.data.id;
             localStorage.name = data.data.name;
             localStorage.password = data.data.password;
+            console.log(localStorage.getItem("token"));
         },
         setNumberList(state, data) {
             state.NumberList = data;

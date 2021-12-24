@@ -4,7 +4,7 @@
     <div class="from" v-else>
       <div class="top"></div>
 
-      <el-row :gutter="20" type="flex" class="row-bg">
+      <el-row :gutter="20" type="flex" class="row-bg item">
         <el-col :span="2">
           <div class="grid-content bg-purple">
             <h3><i class="el-icon-lollipop"></i>昵称</h3>
@@ -21,15 +21,23 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="20" type="flex" class="row-bg">
+      <el-row :gutter="20" type="flex" class="row-bg item">
         <el-col :span="2">
           <div class="grid-content bg-purple">
             <h3><i class="el-icon-message"></i>密码</h3>
           </div>
         </el-col>
         <el-col :span="12">
-          <div class="aa">
-            {{ this.user.passwrod }}
+          <div v-if="ischange" class="aa">
+            {{ this.user.password }}
+          </div>
+          <div id="input1" class="grid-content bg-purple-light" v-else>
+            <h3>
+              <el-input
+                v-model="user.password"
+                placeholder="请输入内容"
+              ></el-input>
+            </h3>
           </div>
         </el-col>
       </el-row>
@@ -61,6 +69,7 @@ export default {
   data() {
     return {
       user: {
+        id: "",
         name: "",
         password: "",
       },
@@ -112,14 +121,9 @@ export default {
     },
   },
   mounted() {
-    this.user.username = this.$store.state.software.user.username;
-    this.user.email = this.$store.state.software.user.email;
-    if (this.$store.state.software.user.phone === "0")
-      this.user.phone = "未设置";
-    if (this.$store.state.software.user.qq == "0") this.user.qq = "未设置";
-    if (this.$store.state.software.user.wechat == "0")
-      this.user.wechat = "未设置";
-    console.log(this.$store.state.software.user);
+    this.user.id = localStorage.getItem("id");
+    this.user.name = localStorage.getItem("name");
+    this.user.password = localStorage.getItem("password");
     console.log(this.user);
   },
 };
@@ -145,5 +149,8 @@ export default {
   /* margin-top: 0vh; */
   width: 60vw;
   height: 60vh;
+}
+.item {
+  margin-top: 20px;
 }
 </style>
