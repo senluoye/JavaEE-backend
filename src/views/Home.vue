@@ -65,7 +65,7 @@ export default {
       navList: [
         { name: "/shouye", navItem: "首页" },
         { name: "/commodity", navItem: "商品管理" },
-        { name: "/order", navItem: "增加商品" },
+        { name: "/add", navItem: "增加商品" },
         { name: "/self", navItem: "商家信息" },
       ],
     };

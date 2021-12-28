@@ -60,7 +60,7 @@
         ></el-input>
         <div class="ee">
           <el-button @click="commit()" type="primary">修改</el-button>
-          <el-button @click="deleteById()" type="primary">删除</el-button>
+          <!-- <el-button @click="deleteById()" type="primary">删除</el-button> -->
         </div>
       </div>
     </div>
@@ -79,21 +79,10 @@ export default {
     };
   },
   methods: {
-    handleAddToCart() {
-      this.$alert("已成功添加订单", "提示", {
-        confirmButtonText: "确定",
-        callback: (action) => {
-          this.$message({
-            type: "info",
-            message: `action: ${action}`,
-          });
-        },
-      });
-    },
-    deleteById() {
-      let obj = { commodityId: this.softwareDetail.id };
-      this.$store.dispatch("deleteById", JSON.stringify(obj));
-    },
+    // deleteById() {
+    //   let obj = { commodityId: this.softwareDetail.id };
+    //   this.$store.dispatch("deleteById", JSON.stringify(obj));
+    // },
     commit() {
       let commodity = {
         id: this.softwareDetail.id,

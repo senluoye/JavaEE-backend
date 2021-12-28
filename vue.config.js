@@ -1,11 +1,11 @@
 module.exports = {
-    publicPath: '/vue/',
+    publicPath: './',
     outputDir: 'dist',
 
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://javaee.therainisme.com',
+                target: 'https://javaee.therainisme.com',
                 ws: true,
                 changeOrigin: true
             }

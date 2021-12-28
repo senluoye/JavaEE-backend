@@ -5,9 +5,9 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Shouye from '../components/Shouye.vue'
 import Commodity from '../components/Commodity.vue'
-import Order from '../components/Order.vue'
+import Add from '../components/Add.vue'
 import Self from '../views/self'
-import goumai from '../components/goumai'
+import Change from '../components/Change'
 
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -33,9 +33,9 @@ const routes = [{
                 component: Commodity
             },
             {
-                path: '/order',
-                name: 'Order',
-                component: Order
+                path: '/add',
+                name: 'Add',
+                component: Add
             },
             {
                 path: '/self',
@@ -45,8 +45,8 @@ const routes = [{
 
             {
                 path: '/change',
-                name: 'goumai',
-                component: goumai
+                name: 'Change',
+                component: Change
             },
         ]
     },
@@ -64,7 +64,7 @@ const routes = [{
 
 const router = new VueRouter({
     // base: '/vue3/',
-    mode: 'history',
+    // mode: 'history',
     base: process.env.BASE_URL,
     routes
 })
